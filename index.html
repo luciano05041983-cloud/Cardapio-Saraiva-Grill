@@ -1,0 +1,1363 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saraiva Grill - Cardápio Digital</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- TODOS OS ESTILOS ANTERIORES PERMANECEM IGUAIS --- */
+        /* (repeti o código completo por questões de fidelidade, mas você pode manter seu CSS original) */
+        :root {
+            --bg-dark: #1c120e;
+            --card-bg: #2b1e19;
+            --primary-red: #8b1e19;
+            --text-light: #f5f0eb;
+            --text-muted: #bfaaa0;
+            --accent-gold: #d4a373;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            display: flex;
+            justify-content: center;
+            position: relative;
+        }
+
+        .menu-container {
+            width: 100%;
+            max-width: 480px;
+            background-color: var(--bg-dark);
+            min-height: 100vh;
+            padding-bottom: 110px;
+            position: relative;
+        }
+
+        /* --- SPLASH SCREEN --- */
+        #splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #FFFFFF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.8s ease;
+            overflow: hidden;
+        }
+        #splash-screen img {
+            max-width: 80%;
+            max-height: 80%;
+            object-fit: contain;
+            border-radius: 0;
+            box-shadow: none;
+            animation: slideDown 1.2s ease-out forwards;
+            transform: translateY(-100%);
+            opacity: 0;
+        }
+        @keyframes slideDown {
+            0% { transform: translateY(-100%); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+        #splash-screen.hide {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* --- CABEÇALHO --- */
+        .header {
+            text-align: center;
+            padding: 40px 20px 30px 20px;
+            background: linear-gradient(to bottom, rgba(139, 30, 25, 0.2), transparent);
+            border-bottom: 2px dashed var(--card-bg);
+            position: relative;
+        }
+        .logo-placeholder {
+            width: 130px;
+            height: 130px;
+            background-color: var(--card-bg);
+            border: 3px solid var(--primary-red);
+            border-radius: 50%;
+            margin: 0 auto 15px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+        }
+        .logo-placeholder img { width: 100%; height: 100%; object-fit: cover; }
+        .header h1 { font-family: 'Barlow Condensed', sans-serif; font-size: 2rem; letter-spacing: 1px; text-transform: uppercase; }
+        .header p { font-size: 0.9rem; color: var(--text-muted); margin-top: 5px; }
+        .header .instagram-link {
+            display: inline-block;
+            margin-top: 10px;
+            color: var(--accent-gold);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+        .header .instagram-link:hover { color: var(--text-light); }
+        .header .instagram-link svg { width: 18px; height: 18px; vertical-align: middle; fill: var(--accent-gold); margin-right: 5px; transition: fill 0.2s; }
+        .header .instagram-link:hover svg { fill: var(--text-light); }
+        .header .address-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 12px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: color 0.2s;
+        }
+        .header .address-link:hover { color: var(--accent-gold); }
+        .header .address-link svg { width: 16px; height: 16px; fill: var(--accent-gold); transition: fill 0.2s; }
+        .header .address-link:hover svg { fill: var(--text-light); }
+
+        .marquee-container {
+            overflow: hidden;
+            background-color: var(--primary-red);
+            padding: 8px 0;
+            margin-top: 15px;
+            border-radius: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        .marquee-text {
+            display: inline-block;
+            white-space: nowrap;
+            animation: marqueeScroll 15s linear infinite;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #fff;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        @keyframes marqueeScroll {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        .cart-counter {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background-color: var(--primary-red);
+            color: #fff;
+            border-radius: 50px;
+            padding: 8px 20px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            border: 2px solid var(--accent-gold);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.2s;
+            margin-top: 12px;
+        }
+        .cart-counter:active { transform: scale(0.95); }
+        .cart-counter .badge {
+            background-color: #fff;
+            color: var(--primary-red);
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .toast-container {
+            position: fixed;
+            bottom: 140px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 400;
+            pointer-events: none;
+            width: 90%;
+            max-width: 400px;
+        }
+        .toast {
+            background-color: var(--card-bg);
+            border-left: 4px solid var(--accent-gold);
+            color: var(--text-light);
+            padding: 12px 20px;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+            font-weight: 500;
+            font-size: 0.95rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+            text-align: center;
+            pointer-events: none;
+        }
+        .toast.show { opacity: 1; transform: translateY(0); }
+
+        .section { padding: 30px 20px 10px 20px; scroll-margin-top: 10px; }
+        .section-title {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 1.6rem;
+            text-transform: uppercase;
+            color: var(--text-light);
+            border-left: 4px solid var(--primary-red);
+            padding-left: 10px;
+            margin-bottom: 20px;
+            letter-spacing: 0.5px;
+        }
+
+        .item-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            transition: transform 0.2s;
+        }
+        .item-card:active { transform: scale(0.98); }
+        .item-image { width: 100%; height: 180px; background-color: #3d2d26; overflow: hidden; }
+        .item-image img { width: 100%; height: 100%; object-fit: cover; }
+        .item-info { padding: 15px; }
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+        }
+        .item-title { font-size: 1.1rem; font-weight: 600; color: var(--text-light); padding-right: 10px; flex: 1; }
+        .item-price { font-family: 'Barlow Condensed', sans-serif; font-size: 1.3rem; font-weight: 700; color: var(--accent-gold); white-space: nowrap; }
+        .item-description { font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; margin-bottom: 12px; }
+        .item-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        .btn-add {
+            background-color: var(--primary-red);
+            color: #fff;
+            border: none;
+            padding: 6px 18px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-add:active { transform: scale(0.95); background-color: #a0221d; }
+        .btn-undo {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 20px;
+            transition: background-color 0.2s, color 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-weight: 500;
+        }
+        .btn-undo:hover { background-color: rgba(255,255,255,0.05); color: var(--text-light); }
+        .btn-undo:active { transform: scale(0.95); }
+
+        .side-dishes-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .side-item {
+            background-color: var(--card-bg);
+            padding: 12px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .side-title { font-size: 0.95rem; font-weight: 500; margin-bottom: 5px; }
+        .side-price { font-family: 'Barlow Condensed', sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--accent-gold); align-self: flex-end; }
+        .side-volume { font-size: 0.7rem; color: var(--text-muted); margin-top: 4px; }
+        .side-item .item-actions { margin-top: 8px; }
+        .side-item .btn-add { font-size: 0.75rem; padding: 4px 14px; }
+        .side-item .btn-undo { font-size: 0.7rem; padding: 2px 6px; }
+
+        .map-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        .map-card .map-title { font-family: 'Barlow Condensed', sans-serif; font-size: 1.4rem; color: var(--text-light); margin-bottom: 10px; }
+        .map-card .map-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background-color: var(--primary-red);
+            color: #fff;
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: background-color 0.2s, transform 0.2s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        .map-card .map-button:active { transform: scale(0.95); background-color: #a0221d; }
+        .map-card .map-button svg { width: 20px; height: 20px; fill: #fff; }
+        .map-card .map-address { margin-top: 12px; color: var(--text-muted); font-size: 0.85rem; }
+
+        .footer-credit {
+            text-align: center;
+            padding: 20px 15px 10px 15px;
+            border-top: 1px solid var(--card-bg);
+            margin-top: 10px;
+            font-size: 0.75rem;
+        }
+        .footer-credit a {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            color: var(--accent-gold);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .footer-credit a:hover { color: var(--text-light); }
+        .footer-credit a svg { width: 16px; height: 16px; fill: var(--accent-gold); transition: fill 0.2s; }
+        .footer-credit a:hover svg { fill: var(--text-light); }
+
+        .nav-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            max-width: 480px;
+            background-color: var(--card-bg);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 8px 0;
+            border-top: 2px solid var(--primary-red);
+            z-index: 200;
+            box-shadow: 0 -4px 10px rgba(0,0,0,0.4);
+        }
+        .nav-bar a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            padding: 4px 6px;
+            transition: color 0.2s, border-bottom 0.2s;
+            letter-spacing: 0.5px;
+            text-align: center;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-bar a:active,
+        .nav-bar a:hover { color: var(--text-light); }
+        .nav-bar a.active { color: var(--accent-gold); border-bottom-color: var(--accent-gold); }
+
+        .whatsapp-float {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            background-color: #25d366;
+            border-radius: 50%;
+            width: 56px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            z-index: 150;
+            transition: transform 0.2s, background-color 0.2s;
+            text-decoration: none;
+        }
+        .whatsapp-float:active { transform: scale(0.9); background-color: #1ebd59; }
+        .whatsapp-float svg { width: 32px; height: 32px; fill: #fff; }
+
+        /* MODAIS */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            z-index: 500;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal {
+            background-color: var(--bg-dark);
+            border-radius: 20px;
+            max-width: 480px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 25px 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+            border: 2px solid var(--primary-red);
+            position: relative;
+        }
+        .modal::-webkit-scrollbar { width: 6px; }
+        .modal::-webkit-scrollbar-thumb { background: var(--primary-red); border-radius: 10px; }
+        .modal-title { font-family: 'Barlow Condensed', sans-serif; font-size: 1.8rem; text-align: center; color: var(--text-light); margin-bottom: 20px; border-bottom: 2px dashed var(--card-bg); padding-bottom: 12px; }
+        .modal-close { position: absolute; top: 15px; right: 20px; font-size: 2rem; color: var(--text-muted); cursor: pointer; transition: color 0.2s; background: none; border: none; line-height: 1; }
+        .modal-close:hover { color: var(--text-light); }
+
+        .order-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: var(--card-bg);
+            padding: 10px 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .order-item .item-details { flex: 1; min-width: 120px; }
+        .order-item .item-name { font-weight: 500; font-size: 0.95rem; }
+        .order-item .item-qty-price { font-size: 0.85rem; color: var(--text-muted); }
+        .order-item .item-actions { display: flex; gap: 6px; align-items: center; }
+        .order-item .item-actions button { background: none; border: none; font-size: 1.1rem; cursor: pointer; padding: 4px 6px; border-radius: 4px; transition: background-color 0.2s; color: var(--text-light); }
+        .order-item .item-actions .edit-btn { color: var(--accent-gold); }
+        .order-item .item-actions .edit-btn:hover { background-color: rgba(212, 163, 115, 0.2); }
+        .order-item .item-actions .delete-btn { color: #e74c3c; }
+        .order-item .item-actions .delete-btn:hover { background-color: rgba(231, 76, 60, 0.2); }
+        .order-total { text-align: right; font-size: 1.2rem; font-weight: 700; color: var(--accent-gold); margin: 15px 0 20px 0; padding-top: 10px; border-top: 2px dashed var(--card-bg); }
+        .btn-back-menu {
+            display: block;
+            margin: 10px auto 15px auto;
+            background: transparent;
+            border: 2px solid var(--accent-gold);
+            color: var(--accent-gold);
+            padding: 8px 24px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background-color 0.2s, color 0.2s;
+            text-align: center;
+            width: fit-content;
+        }
+        .btn-back-menu:hover { background-color: var(--accent-gold); color: var(--bg-dark); }
+
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; font-weight: 500; font-size: 0.9rem; margin-bottom: 4px; color: var(--text-light); }
+        .form-group .required { color: #e74c3c; margin-left: 4px; }
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px 14px;
+            border-radius: 8px;
+            border: 2px solid var(--card-bg);
+            background-color: var(--card-bg);
+            color: var(--text-light);
+            font-size: 0.95rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .form-group input:focus,
+        .form-group select:focus { outline: none; border-color: var(--accent-gold); box-shadow: 0 0 0 3px rgba(212, 163, 115, 0.3); }
+        .form-group input.error,
+        .form-group select.error { border-color: #e74c3c; box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.2); }
+        .form-group .field-hint { font-size: 0.75rem; color: var(--text-muted); margin-top: 4px; }
+        .form-group .field-hint.required-hint { color: #e74c3c; }
+        .btn-submit-order {
+            width: 100%;
+            background-color: #25d366;
+            color: #fff;
+            border: none;
+            padding: 14px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.2s;
+            margin-top: 10px;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+        }
+        .btn-submit-order:active { transform: scale(0.97); background-color: #1ebd59; }
+        .empty-cart { text-align: center; color: var(--text-muted); padding: 30px 0; }
+
+        /* Modal Reserva com itens */
+        .modal-reserva .modal-title { color: var(--accent-gold); font-size: 1.6rem; }
+        .modal-reserva .modal-subtitle { text-align: center; color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px; line-height: 1.6; }
+        .modal-reserva .btn-submit-reserva {
+            width: 100%;
+            background-color: var(--accent-gold);
+            color: var(--bg-dark);
+            border: none;
+            padding: 14px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.2s;
+            margin-top: 10px;
+            box-shadow: 0 4px 15px rgba(212, 163, 115, 0.3);
+        }
+        .modal-reserva .btn-submit-reserva:active { transform: scale(0.97); background-color: #c4956a; }
+
+        /* Checkboxes para itens da reserva */
+        .reserva-itens-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin: 10px 0 15px 0;
+        }
+        .reserva-item-check {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background-color: var(--card-bg);
+            padding: 6px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .reserva-item-check:hover { background-color: rgba(255,255,255,0.05); }
+        .reserva-item-check input[type="checkbox"] { accent-color: var(--accent-gold); width: 16px; height: 16px; cursor: pointer; }
+        .reserva-item-check label { font-size: 0.85rem; color: var(--text-light); cursor: pointer; flex: 1; }
+
+        /* Modal Acompanhamentos */
+        .acompanhamentos-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        .acompanhamento-item {
+            background-color: var(--card-bg);
+            padding: 10px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            border: 2px solid transparent;
+        }
+        .acompanhamento-item.selected { border-color: var(--accent-gold); background-color: rgba(212, 163, 115, 0.15); }
+        .acompanhamento-item input[type="checkbox"] { accent-color: var(--accent-gold); width: 18px; height: 18px; cursor: pointer; }
+        .acompanhamento-item label { font-size: 0.9rem; color: var(--text-light); cursor: pointer; flex: 1; }
+        .modal-acompanhamentos .modal-subtitle { text-align: center; color: var(--text-muted); font-size: 0.9rem; margin-bottom: 10px; }
+        .btn-confirm-acompanhamentos {
+            width: 100%;
+            background-color: var(--primary-red);
+            color: #fff;
+            border: none;
+            padding: 12px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.2s;
+            margin-top: 10px;
+        }
+        .btn-confirm-acompanhamentos:active { transform: scale(0.97); background-color: #a0221d; }
+
+        @media (max-width: 400px) {
+            .nav-bar a { font-size: 0.6rem; padding: 2px 4px; }
+            .whatsapp-float { width: 48px; height: 48px; bottom: 70px; right: 10px; }
+            .whatsapp-float svg { width: 28px; height: 28px; }
+            .marquee-text { font-size: 0.75rem; }
+            .cart-counter { font-size: 0.75rem; padding: 6px 14px; }
+            .cart-counter .badge { width: 20px; height: 20px; font-size: 0.7rem; }
+            .toast-container { bottom: 120px; }
+            .toast { font-size: 0.85rem; padding: 10px 16px; }
+            .btn-undo { font-size: 0.7rem; padding: 2px 6px; }
+            .acompanhamentos-grid { grid-template-columns: 1fr 1fr; }
+            .reserva-itens-grid { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- SPLASH SCREEN -->
+<div id="splash-screen">
+    <img src="https://i.ibb.co/PzhxvFDr/1781633618218.png" alt="Saraiva Grill">
+</div>
+
+<div class="menu-container">
+
+    <!-- CABEÇALHO -->
+    <header class="header">
+        <div class="logo-placeholder">
+            <img src="https://i.ibb.co/PGLsw7mm/1781633618218.png" alt="Saraiva Grill Logo">
+        </div>
+        <h1>Saraiva Grill</h1>
+        <p>🔥 O melhor da cidade na sua mesa!</p>
+        <a href="https://instagram.com/saraivagrill" target="_blank" class="instagram-link">
+            <svg viewBox="0 0 24 24">
+                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+            </svg>
+            @saraivagrill
+        </a>
+
+        <a href="https://maps.app.goo.gl/QqUqbAyWKUNXjmL76?g_st=ac" target="_blank" class="address-link">
+            <svg viewBox="0 0 24 24">
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+            </svg>
+            Rua Quintino Bocaiúva, 1900 - Saraiva
+        </a>
+
+        <div class="marquee-container">
+            <div class="marquee-text">📅 Funcionamos aos sábados, domingos e feriados!</div>
+        </div>
+
+        <div class="cart-counter" id="cartCounter" onclick="openModal()">
+            🛒 Meu Pedido <span class="badge" id="cartCount">0</span>
+        </div>
+    </header>
+
+    <!-- TOAST -->
+    <div class="toast-container" id="toastContainer">
+        <div class="toast" id="toastMessage"></div>
+    </div>
+
+    <!-- SEÇÃO: FRANGO ASSADO -->
+    <section class="section" id="frango-assado">
+        <h2 class="section-title">Frango Assado</h2>
+        <div class="item-card" data-name="Frango Assado Inteiro" data-price="58.00">
+            <div class="item-image">
+                <img src="https://i.ibb.co/7JFDSMMh/1781637401084.png" alt="Frango Assado Inteiro">
+            </div>
+            <div class="item-info">
+                <div class="item-header">
+                    <span class="item-title">Frango Assado Inteiro</span>
+                    <span class="item-price">R$ 58,00</span>
+                </div>
+                <p class="item-description">Frango selecionado, marinado em tempero caseiro secreto e assado lentamente até a pele ficar dourada e crocante. Suculento por dentro!</p>
+                <div class="item-actions">
+                    <button class="btn-add" onclick="addItem(this)">➕ Adicionar</button>
+                    <button class="btn-undo" style="display:none;" onclick="undoItem(this)">↩️ Desfazer</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEÇÃO: COXA COM SOBRECOXA -->
+    <section class="section" id="coxa-sobrecoxa">
+        <h2 class="section-title">Coxa com Sobrecoxa</h2>
+        <div class="item-card" data-name="Coxa com Sobrecoxa (Porção)" data-price="12.00">
+            <div class="item-image">
+                <img src="https://i.ibb.co/XfcMG204/file-000000004aec720e8eab4eb5d116b7a6.png" alt="Coxa com Sobrecoxa">
+            </div>
+            <div class="item-info">
+                <div class="item-header">
+                    <span class="item-title">Coxa com Sobrecoxa (Porção)</span>
+                    <span class="item-price">R$ 12,00</span>
+                </div>
+                <p class="item-description">Cortes nobres e generosos, assados no ponto certo com ervas finas. Carne macia e suculenta que desmancha na boca.</p>
+                <div class="item-actions">
+                    <button class="btn-add" onclick="addItem(this)">➕ Adicionar</button>
+                    <button class="btn-undo" style="display:none;" onclick="undoItem(this)">↩️ Desfazer</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEÇÃO: FRANGO RECHEADO -->
+    <section class="section" id="frango-recheado">
+        <h2 class="section-title">Frango Recheado</h2>
+        <div class="item-card" data-name="Frango Recheado Especial" data-price="70.00">
+            <div class="item-image">
+                <img src="https://i.ibb.co/Jj9vZ3CZ/1781637659779.png" alt="Frango Recheado">
+            </div>
+            <div class="item-info">
+                <div class="item-header">
+                    <span class="item-title">Frango Recheado Especial</span>
+                    <span class="item-price">R$ 70,00</span>
+                </div>
+                <p class="item-description">O clássico frango assado inteiro, recheado com uma farofa gourmet de ingredientes selecionados que elevam o sabor a outro nível.</p>
+                <div class="item-actions">
+                    <button class="btn-add" onclick="addItem(this)">➕ Adicionar</button>
+                    <button class="btn-undo" style="display:none;" onclick="undoItem(this)">↩️ Desfazer</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEÇÃO: COMBOS -->
+    <section class="section" id="combos">
+        <h2 class="section-title">Combos</h2>
+        
+        <div class="item-card" data-name="Combo 1" data-price="72.00">
+            <div class="item-image">
+                <img src="https://i.ibb.co/NgNmXVKV/Screenshot-20260616-170710-Chat-GPT.png" alt="Combo 1">
+            </div>
+            <div class="item-info">
+                <div class="item-header">
+                    <span class="item-title">Combo 1</span>
+                    <span class="item-price">R$ 72,00</span>
+                </div>
+                <p class="item-description">1 Frango Assado Inteiro + 1 Maionese (500ml). Perfeito para compartilhar.</p>
+                <div class="item-actions">
+                    <button class="btn-add" onclick="addItem(this)">➕ Adicionar</button>
+                    <button class="btn-undo" style="display:none;" onclick="undoItem(this)">↩️ Desfazer</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="item-card" data-name="Combo 2" data-price="83.00" data-combo2="true">
+            <div class="item-image">
+                <img src="https://i.ibb.co/jc0CYx3/file-000000005044720eb9a26c9619c20e2e.png" alt="Combo 2">
+            </div>
+            <div class="item-info">
+                <div class="item-header">
+                    <span class="item-title">Combo 2</span>
+                    <span class="item-price">R$ 83,00</span>
+                </div>
+                <p class="item-description">1 Frango Assado Inteiro + 2 Acompanhamentos (500ml cada) à sua escolha. Monte seu combo!</p>
+                <div class="item-actions">
+                    <button class="btn-add" onclick="addItem(this)">➕ Adicionar</button>
+                    <button class="btn-undo" style="display:none;" onclick="undoItem(this)">↩️ Desfazer</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="item-card" data-name="Combo Família" data-price="99.90">
+            <div class="item-image">
+                <img src="https://i.ibb.co/HwgzJPk/1781640572222.png" alt="Combo Família">
+            </div>
+            <div class="item-info">
+                <div class="item-header">
+                    <span class="item-title">Combo Família</span>
+                    <span class="item-price">R$ 99,90</span>
+                </div>
+                <p class="item-description">1 Frango Assado Inteiro + Feijão Tropeiro (500ml) + Maionese (500ml) + Arroz (500ml) + Coca-Cola 1,5L.</p>
+                <div class="item-actions">
+                    <button class="btn-add" onclick="addItem(this)">➕ Adicionar</button>
+                    <button class="btn-undo" style="display:none;" onclick="undoItem(this)">↩️ Desfazer</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEÇÃO: ACOMPANHAMENTOS -->
+    <section class="section" id="acompanhamentos">
+        <h2 class="section-title">Acompanhamentos</h2>
+        <div class="side-dishes-grid">
+            <div class="side-item" data-name="Feijão Tropeiro" data-price="15.00">
+                <span class="side-title">Feijão Tropeiro</span>
+                <span class="side-price">R$ 15,00</span>
+                <span class="side-volume">500ml</span>
+                <div class="item-actions">
+                    <button class="btn-add" onclick="addItem(this)">➕ Adicionar</button>
+                    <button class="btn-undo" style="display:none;" onclick="undoItem(this)">↩️ Desfazer</button>
+                </div>
+            </div>
+            <div class="side-item" data-name="Maionese" data-price="15.00">
+                <span class="side-title">Maionese</span>
+                <span class="side-price">R$ 15,00</span>
+                <span class="side-volume">500ml</span>
+                <div class="item-actions">
+                    <button class="btn-add" onclick="addItem(this)">➕ Adicionar</button>
+                    <button class="btn-undo" style="display:none;" onclick="undoItem(this)">↩️ Desfazer</button>
+                </div>
+            </div>
+            <div class="side-item" data-name="Arroz" data-price="10.00">
+                <span class="side-title">Arroz</span>
+                <span class="side-price">R$ 10,00</span>
+                <span class="side-volume">500ml</span>
+                <div class="item-actions">
+                    <button class="btn-add" onclick="addItem(this)">➕ Adicionar</button>
+                    <button class="btn-undo" style="display:none;" onclick="undoItem(this)">↩️ Desfazer</button>
+                </div>
+            </div>
+            <div class="side-item" data-name="Salada" data-price="10.00">
+                <span class="side-title">Salada</span>
+                <span class="side-price">R$ 10,00</span>
+                <span class="side-volume">500ml</span>
+                <div class="item-actions">
+                    <button class="btn-add" onclick="addItem(this)">➕ Adicionar</button>
+                    <button class="btn-undo" style="display:none;" onclick="undoItem(this)">↩️ Desfazer</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEÇÃO: LOCALIZAÇÃO -->
+    <section class="section" style="padding-top:10px;">
+        <div class="map-card">
+            <div class="map-title">📍 Onde estamos</div>
+            <a href="https://maps.app.goo.gl/QqUqbAyWKUNXjmL76?g_st=ac" target="_blank" class="map-button">
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                </svg>
+                Abrir no Google Maps
+            </a>
+            <div class="map-address">Rua Quintino Bocaiúva, 1900 - Saraiva</div>
+        </div>
+    </section>
+
+    <!-- RODAPÉ -->
+    <div class="footer-credit">
+        <a href="https://wa.me/5534991058994" target="_blank" aria-label="WhatsApp">
+            <span>cardápio digital criado por</span>
+            <svg viewBox="0 0 24 24">
+                <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.513 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.713-1.457L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.864-9.742.002-2.602-1.005-5.05-2.837-6.88C16.671 2.151 14.224 1.144 11.63 1.143c-5.442 0-9.866 4.372-9.87 9.746-.002 1.714.463 3.39 1.347 4.9l-.994 3.635 3.744-.97zM17.47 14.867c-.267-.134-1.58-.778-1.826-.865-.246-.088-.426-.132-.605.135-.179.266-.693.865-.85 1.042-.157.177-.314.198-.581.064-.267-.134-1.127-.415-2.147-1.323-.79-.704-1.324-1.574-1.48-1.84-.156-.267-.017-.411.117-.544.121-.12.267-.312.4-.468.134-.156.179-.266.268-.444.089-.178.045-.333-.022-.467-.067-.134-.605-1.456-.828-2.001-.218-.524-.442-.453-.605-.461-.157-.008-.337-.009-.517-.009s-.472.067-.72.337c-.247.269-.944.923-.944 2.25s.965 2.604 1.1 2.784c.134.179 1.897 2.897 4.594 4.06.642.277 1.143.443 1.534.567.645.205 1.233.176 1.697.107.517-.077 1.58-.646 1.803-1.24.223-.593.223-1.1.157-1.202-.066-.104-.246-.157-.513-.291z"/>
+            </svg>
+        </a>
+    </div>
+
+    <!-- BARRA DE NAVEGAÇÃO -->
+    <nav class="nav-bar" id="navBar">
+        <a href="#frango-assado" class="nav-link">Frango</a>
+        <a href="#coxa-sobrecoxa" class="nav-link">Coxa</a>
+        <a href="#frango-recheado" class="nav-link">Recheado</a>
+        <a href="#combos" class="nav-link">Combos</a>
+        <a href="#acompanhamentos" class="nav-link">Acomp.</a>
+    </nav>
+
+    <!-- WHATSAPP FLUTUANTE -->
+    <a href="https://wa.me/5534998822605?text=Olá,%20gostaria%20de%20fazer%20um%20pedido!" class="whatsapp-float" target="_blank" aria-label="WhatsApp">
+        <svg viewBox="0 0 24 24">
+            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.513 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.713-1.457L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.864-9.742.002-2.602-1.005-5.05-2.837-6.88C16.671 2.151 14.224 1.144 11.63 1.143c-5.442 0-9.866 4.372-9.87 9.746-.002 1.714.463 3.39 1.347 4.9l-.994 3.635 3.744-.97zM17.47 14.867c-.267-.134-1.58-.778-1.826-.865-.246-.088-.426-.132-.605.135-.179.266-.693.865-.85 1.042-.157.177-.314.198-.581.064-.267-.134-1.127-.415-2.147-1.323-.79-.704-1.324-1.574-1.48-1.84-.156-.267-.017-.411.117-.544.121-.12.267-.312.4-.468.134-.156.179-.266.268-.444.089-.178.045-.333-.022-.467-.067-.134-.605-1.456-.828-2.001-.218-.524-.442-.453-.605-.461-.157-.008-.337-.009-.517-.009s-.472.067-.72.337c-.247.269-.944.923-.944 2.25s.965 2.604 1.1 2.784c.134.179 1.897 2.897 4.594 4.06.642.277 1.143.443 1.534.567.645.205 1.233.176 1.697.107.517-.077 1.58-.646 1.803-1.24.223-.593.223-1.1.157-1.202-.066-.104-.246-.157-.513-.291z"/>
+        </svg>
+    </a>
+</div>
+
+<!-- MODAL "MEU PEDIDO" -->
+<div class="modal-overlay" id="orderModal">
+    <div class="modal">
+        <button class="modal-close" onclick="closeModal()">×</button>
+        <div class="modal-title">📋 Meu Pedido</div>
+        <div id="orderItemsList"><div class="empty-cart">Seu pedido está vazio.</div></div>
+        <button class="btn-back-menu" onclick="closeModal()">🔙 Voltar ao Cardápio</button>
+        <div class="order-total" id="orderTotal">Total: R$ 0,00</div>
+        <form id="orderForm" onsubmit="submitOrder(event)">
+            <div class="form-group">
+                <label>Seu nome <span class="required">*</span></label>
+                <input type="text" id="customerName" placeholder="Digite seu nome" required>
+            </div>
+            <div class="form-group">
+                <label>Forma de entrega <span class="required">*</span></label>
+                <select id="deliveryMethod" required>
+                    <option value="">Selecione...</option>
+                    <option value="retirada">Retirada no balcão</option>
+                    <option value="delivery">Delivery</option>
+                </select>
+            </div>
+            <div class="form-group" id="addressGroup" style="display:none;">
+                <label>Endereço <span class="required">*</span></label>
+                <input type="text" id="deliveryAddress" placeholder="Rua, número, bairro, complemento">
+                <div class="field-hint required-hint">Obrigatório para delivery</div>
+            </div>
+            <div class="form-group">
+                <label>Forma de pagamento <span class="required">*</span></label>
+                <select id="paymentMethod" required>
+                    <option value="">Selecione...</option>
+                    <option value="pix">Pix</option>
+                    <option value="credito">Cartão de crédito</option>
+                    <option value="dinheiro">Dinheiro</option>
+                </select>
+            </div>
+            <div class="form-group" id="changeGroup" style="display:none;">
+                <label>Troco para quanto? <span class="required">*</span></label>
+                <input type="number" id="changeAmount" placeholder="Ex: 100" step="0.01" min="0">
+                <div class="field-hint required-hint">Obrigatório para pagamento em dinheiro</div>
+            </div>
+            <button type="submit" class="btn-submit-order">📲 Enviar Pedido</button>
+        </form>
+    </div>
+</div>
+
+<!-- MODAL RESERVA (com seleção de itens) -->
+<div class="modal-overlay modal-reserva" id="reservaModal">
+    <div class="modal">
+        <button class="modal-close" onclick="fecharReserva()">×</button>
+        <div class="modal-title">📅 Faça sua Reserva</div>
+        <div class="modal-subtitle">
+            🍗 Funcionamos apenas aos sábados, domingos e feriados.<br>
+            Preencha os dados abaixo e selecione os itens que deseja reservar.
+        </div>
+        <form id="reservaForm" onsubmit="submitReserva(event)">
+            <div class="form-group">
+                <label>Seu nome <span class="required">*</span></label>
+                <input type="text" id="reservaNome" placeholder="Digite seu nome" required>
+            </div>
+            <div class="form-group">
+                <label>Telefone <span class="required">*</span></label>
+                <input type="tel" id="reservaTelefone" placeholder="(99) 99999-9999" required>
+            </div>
+            <div class="form-group">
+                <label>Data desejada <span class="required">*</span></label>
+                <input type="date" id="reservaData" required>
+            </div>
+            <div class="form-group">
+                <label>Horário <span class="required">*</span></label>
+                <input type="time" id="reservaHorario" required>
+            </div>
+
+            <!-- SEÇÃO DE ITENS PARA RESERVA -->
+            <div class="form-group">
+                <label>Itens que deseja reservar (opcional)</label>
+                <div class="reserva-itens-grid">
+                    <div class="reserva-item-check">
+                        <input type="checkbox" id="resItem1" value="Frango Assado Inteiro">
+                        <label for="resItem1">Frango Assado</label>
+                    </div>
+                    <div class="reserva-item-check">
+                        <input type="checkbox" id="resItem2" value="Coxa com Sobrecoxa">
+                        <label for="resItem2">Coxa c/ Sobrecoxa</label>
+                    </div>
+                    <div class="reserva-item-check">
+                        <input type="checkbox" id="resItem3" value="Frango Recheado">
+                        <label for="resItem3">Frango Recheado</label>
+                    </div>
+                    <div class="reserva-item-check">
+                        <input type="checkbox" id="resItem4" value="Combo 1">
+                        <label for="resItem4">Combo 1</label>
+                    </div>
+                    <div class="reserva-item-check">
+                        <input type="checkbox" id="resItem5" value="Combo 2">
+                        <label for="resItem5">Combo 2</label>
+                    </div>
+                    <div class="reserva-item-check">
+                        <input type="checkbox" id="resItem6" value="Combo Família">
+                        <label for="resItem6">Combo Família</label>
+                    </div>
+                    <div class="reserva-item-check">
+                        <input type="checkbox" id="resItem7" value="Acompanhamentos (a definir)">
+                        <label for="resItem7">Acompanhamentos</label>
+                    </div>
+                </div>
+                <div class="field-hint">Marque um ou mais itens. Você pode especificar detalhes nas observações.</div>
+            </div>
+
+            <div class="form-group">
+                <label>Observações</label>
+                <input type="text" id="reservaObs" placeholder="Ex: preferência por molho, quantidade, etc.">
+            </div>
+            <button type="submit" class="btn-submit-reserva">📲 Enviar Reserva</button>
+        </form>
+    </div>
+</div>
+
+<!-- MODAL ACOMPANHAMENTOS (COMBO 2) -->
+<div class="modal-overlay modal-acompanhamentos" id="acompanhamentosModal">
+    <div class="modal">
+        <button class="modal-close" onclick="fecharAcompanhamentos()">×</button>
+        <div class="modal-title">🍽️ Escolha 2 Acompanhamentos</div>
+        <div class="modal-subtitle">Selecione duas opções para o seu Combo 2</div>
+        <div class="acompanhamentos-grid" id="acompanhamentosGrid">
+            <div class="acompanhamento-item" data-name="Feijão Tropeiro">
+                <input type="checkbox" id="acomp1" value="Feijão Tropeiro">
+                <label for="acomp1">Feijão Tropeiro</label>
+            </div>
+            <div class="acompanhamento-item" data-name="Maionese">
+                <input type="checkbox" id="acomp2" value="Maionese">
+                <label for="acomp2">Maionese</label>
+            </div>
+            <div class="acompanhamento-item" data-name="Arroz">
+                <input type="checkbox" id="acomp3" value="Arroz">
+                <label for="acomp3">Arroz</label>
+            </div>
+            <div class="acompanhamento-item" data-name="Salada">
+                <input type="checkbox" id="acomp4" value="Salada">
+                <label for="acomp4">Salada</label>
+            </div>
+        </div>
+        <button class="btn-confirm-acompanhamentos" onclick="confirmarAcompanhamentos()">✅ Confirmar</button>
+    </div>
+</div>
+
+<script>
+    // ===== ESTADO DO PEDIDO =====
+    let cart = [];
+    let toastTimeout = null;
+    let combo2Pending = null;
+
+    // ===== TOAST =====
+    function showToast(message) {
+        const toast = document.getElementById('toastMessage');
+        toast.textContent = message;
+        toast.classList.add('show');
+        if (toastTimeout) clearTimeout(toastTimeout);
+        toastTimeout = setTimeout(() => {
+            toast.classList.remove('show');
+        }, 2000);
+    }
+
+    // ===== VERIFICA DIA PERMITIDO =====
+    function isOperatingDay() {
+        const hoje = new Date();
+        const diaSemana = hoje.getDay();
+        if (diaSemana === 0 || diaSemana === 6) return true;
+        const feriados = ['01-01','21-04','01-05','07-09','12-10','02-11','15-11','25-12'];
+        const mes = String(hoje.getMonth() + 1).padStart(2, '0');
+        const dia = String(hoje.getDate()).padStart(2, '0');
+        return feriados.includes(`${mes}-${dia}`);
+    }
+
+    // ===== RESERVA (agora com itens) =====
+    function showReservaModal() {
+        document.getElementById('reservaModal').classList.add('active');
+    }
+    function fecharReserva() {
+        document.getElementById('reservaModal').classList.remove('active');
+    }
+    function submitReserva(e) {
+        e.preventDefault();
+        const nome = document.getElementById('reservaNome').value.trim();
+        const telefone = document.getElementById('reservaTelefone').value.trim();
+        const data = document.getElementById('reservaData').value;
+        const horario = document.getElementById('reservaHorario').value;
+        const obs = document.getElementById('reservaObs').value.trim();
+
+        // Captura os itens marcados
+        const checkboxes = document.querySelectorAll('#reservaForm input[type="checkbox"]:checked');
+        const itensSelecionados = Array.from(checkboxes).map(cb => cb.value);
+
+        if (!nome || !telefone || !data || !horario) {
+            alert('Preencha todos os campos obrigatórios.');
+            return;
+        }
+
+        let msg = '📅 *RESERVA - SARAIVA GRILL*\n\n';
+        msg += `👤 *Nome:* ${nome}\n`;
+        msg += `📞 *Telefone:* ${telefone}\n`;
+        msg += `📆 *Data:* ${data}\n`;
+        msg += `🕒 *Horário:* ${horario}\n`;
+        if (itensSelecionados.length > 0) {
+            msg += `\n--- ITENS RESERVADOS ---\n`;
+            itensSelecionados.forEach(item => { msg += `✅ ${item}\n`; });
+        } else {
+            msg += `\n*Nenhum item selecionado.*\n`;
+        }
+        if (obs) msg += `\n📝 *Observações:* ${obs}\n`;
+        msg += `\n📱 Reserva feita via cardápio digital.`;
+
+        const encoded = encodeURIComponent(msg);
+        window.open(`https://wa.me/5534998822605?text=${encoded}`, '_blank');
+        fecharReserva();
+        document.getElementById('reservaForm').reset();
+        showToast('✅ Reserva enviada!');
+    }
+
+    // ===== ACOMPANHAMENTOS (COMBO 2) =====
+    function showAcompanhamentosModal(btn) {
+        combo2Pending = btn;
+        document.querySelectorAll('#acompanhamentosGrid input[type="checkbox"]').forEach(cb => cb.checked = false);
+        document.querySelectorAll('.acompanhamento-item').forEach(el => el.classList.remove('selected'));
+        document.getElementById('acompanhamentosModal').classList.add('active');
+    }
+    function fecharAcompanhamentos() {
+        document.getElementById('acompanhamentosModal').classList.remove('active');
+        combo2Pending = null;
+    }
+    function confirmarAcompanhamentos() {
+        const checkboxes = document.querySelectorAll('#acompanhamentosGrid input[type="checkbox"]:checked');
+        if (checkboxes.length !== 2) {
+            alert('Selecione exatamente 2 acompanhamentos.');
+            return;
+        }
+        const escolhas = Array.from(checkboxes).map(cb => cb.value);
+        const nomeCombo = `Combo 2 + ${escolhas.join(' + ')}`;
+        const preco = 83.00;
+        const card = combo2Pending.closest('[data-name]');
+        if (!card) return;
+        const existing = cart.find(item => item.name === nomeCombo);
+        if (existing) {
+            existing.quantity += 1;
+        } else {
+            cart.push({ id: Date.now() + Math.random(), name: nomeCombo, price: preco, quantity: 1 });
+        }
+        updateCartUI();
+        showToast(`✅ ${nomeCombo} adicionado`);
+        const actions = card.querySelector('.item-actions');
+        actions.querySelector('.btn-add').style.display = 'none';
+        actions.querySelector('.btn-undo').style.display = 'inline-flex';
+        if (document.getElementById('orderModal').classList.contains('active')) renderModalItems();
+        fecharAcompanhamentos();
+        combo2Pending = null;
+    }
+
+    // ===== ADICIONAR ITEM =====
+    function addItem(btn) {
+        const card = btn.closest('[data-name]');
+        if (!card) return;
+        const name = card.dataset.name;
+        const price = parseFloat(card.dataset.price);
+
+        if (card.dataset.combo2 === 'true') {
+            if (!isOperatingDay()) {
+                showReservaModal();
+                return;
+            }
+            showAcompanhamentosModal(btn);
+            return;
+        }
+
+        if (!isOperatingDay()) {
+            showReservaModal();
+            return;
+        }
+
+        const existing = cart.find(item => item.name === name);
+        if (existing) {
+            existing.quantity += 1;
+        } else {
+            cart.push({ id: Date.now() + Math.random(), name: name, price: price, quantity: 1 });
+        }
+        updateCartUI();
+        showToast(`✅ ${name} adicionado`);
+        const actions = card.querySelector('.item-actions');
+        actions.querySelector('.btn-add').style.display = 'none';
+        actions.querySelector('.btn-undo').style.display = 'inline-flex';
+        if (document.getElementById('orderModal').classList.contains('active')) renderModalItems();
+    }
+
+    // ===== DESFAZER =====
+    function undoItem(btn) {
+        const card = btn.closest('[data-name]');
+        if (!card) return;
+        const name = card.dataset.name;
+        const itemIndex = cart.findIndex(item => item.name === name);
+        if (itemIndex === -1) return;
+        const item = cart[itemIndex];
+        if (item.quantity > 1) {
+            item.quantity -= 1;
+        } else {
+            cart.splice(itemIndex, 1);
+        }
+        updateCartUI();
+        showToast(`↩️ ${name} removido`);
+        const actions = card.querySelector('.item-actions');
+        actions.querySelector('.btn-add').style.display = 'inline-flex';
+        actions.querySelector('.btn-undo').style.display = 'none';
+        if (document.getElementById('orderModal').classList.contains('active')) renderModalItems();
+    }
+
+    // ===== REMOVER (modal) =====
+    function removeItem(id) {
+        const removed = cart.find(item => item.id === id);
+        if (removed) {
+            const card = document.querySelector(`[data-name="${removed.name}"]`);
+            if (card) {
+                const actions = card.querySelector('.item-actions');
+                actions.querySelector('.btn-add').style.display = 'inline-flex';
+                actions.querySelector('.btn-undo').style.display = 'none';
+            }
+        }
+        cart = cart.filter(item => item.id !== id);
+        updateCartUI();
+        renderModalItems();
+    }
+
+    // ===== EDITAR QUANTIDADE (modal) =====
+    function editItem(id) {
+        const item = cart.find(i => i.id === id);
+        if (!item) return;
+        const newQty = prompt(`Quantidade de "${item.name}":`, item.quantity);
+        if (newQty === null) return;
+        const qty = parseInt(newQty);
+        if (isNaN(qty) || qty < 1) {
+            alert('Mínimo 1.');
+            return;
+        }
+        item.quantity = qty;
+        const card = document.querySelector(`[data-name="${item.name}"]`);
+        if (card) {
+            const actions = card.querySelector('.item-actions');
+            if (item.quantity > 0) {
+                actions.querySelector('.btn-add').style.display = 'none';
+                actions.querySelector('.btn-undo').style.display = 'inline-flex';
+            }
+        }
+        updateCartUI();
+        renderModalItems();
+    }
+
+    // ===== ATUALIZAR CONTADOR =====
+    function updateCartUI() {
+        const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+        document.getElementById('cartCount').textContent = totalItems;
+    }
+
+    // ===== RENDERIZAR MODAL =====
+    function renderModalItems() {
+        const container = document.getElementById('orderItemsList');
+        const totalEl = document.getElementById('orderTotal');
+        if (cart.length === 0) {
+            container.innerHTML = '<div class="empty-cart">Seu pedido está vazio.</div>';
+            totalEl.textContent = 'Total: R$ 0,00';
+            return;
+        }
+        let html = '', total = 0;
+        cart.forEach(item => {
+            const subtotal = item.price * item.quantity;
+            total += subtotal;
+            html += `
+                <div class="order-item">
+                    <div class="item-details">
+                        <div class="item-name">${item.name}</div>
+                        <div class="item-qty-price">${item.quantity}x R$ ${item.price.toFixed(2)} = R$ ${subtotal.toFixed(2)}</div>
+                    </div>
+                    <div class="item-actions">
+                        <button class="edit-btn" onclick="editItem(${item.id})">✏️</button>
+                        <button class="delete-btn" onclick="removeItem(${item.id})">🗑️</button>
+                    </div>
+                </div>
+            `;
+        });
+        container.innerHTML = html;
+        totalEl.textContent = `Total: R$ ${total.toFixed(2)}`;
+    }
+
+    // ===== MODAL DO PEDIDO =====
+    function openModal() {
+        document.getElementById('orderModal').classList.add('active');
+        renderModalItems();
+        document.getElementById('orderForm').reset();
+        document.getElementById('addressGroup').style.display = 'none';
+        document.getElementById('changeGroup').style.display = 'none';
+        document.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
+    }
+    function closeModal() {
+        document.getElementById('orderModal').classList.remove('active');
+    }
+    document.getElementById('orderModal').addEventListener('click', function(e) {
+        if (e.target === this) closeModal();
+    });
+
+    // ===== LÓGICA CONDICIONAL =====
+    document.getElementById('deliveryMethod').addEventListener('change', function() {
+        const g = document.getElementById('addressGroup');
+        const i = document.getElementById('deliveryAddress');
+        if (this.value === 'delivery') {
+            g.style.display = 'block';
+            i.required = true;
+        } else {
+            g.style.display = 'none';
+            i.required = false;
+            i.value = '';
+        }
+    });
+    document.getElementById('paymentMethod').addEventListener('change', function() {
+        const g = document.getElementById('changeGroup');
+        const i = document.getElementById('changeAmount');
+        if (this.value === 'dinheiro') {
+            g.style.display = 'block';
+            i.required = true;
+        } else {
+            g.style.display = 'none';
+            i.required = false;
+            i.value = '';
+        }
+    });
+
+    // ===== SUBMETER PEDIDO =====
+    function submitOrder(e) {
+        e.preventDefault();
+        const name = document.getElementById('customerName').value.trim();
+        const delivery = document.getElementById('deliveryMethod').value;
+        const payment = document.getElementById('paymentMethod').value;
+        if (!name) return alert('Preencha seu nome.');
+        if (!delivery) return alert('Selecione a entrega.');
+        if (delivery === 'delivery') {
+            const addr = document.getElementById('deliveryAddress').value.trim();
+            if (!addr) return alert('Preencha o endereço.');
+        }
+        if (!payment) return alert('Selecione o pagamento.');
+        if (payment === 'dinheiro') {
+            const change = document.getElementById('changeAmount').value;
+            if (!change || parseFloat(change) <= 0) return alert('Informe o troco.');
+        }
+        if (cart.length === 0) return alert('Adicione itens ao pedido.');
+
+        let msg = '🛒 *NOVO PEDIDO - SARAIVA GRILL*\n\n';
+        msg += `👤 Cliente: ${name}\n`;
+        msg += `📦 Entrega: ${delivery === 'retirada' ? 'Retirada no balcão' : 'Delivery'}\n`;
+        if (delivery === 'delivery') msg += `📍 Endereço: ${document.getElementById('deliveryAddress').value.trim()}\n`;
+        msg += `💳 Pagamento: ${payment === 'pix' ? 'Pix' : payment === 'credito' ? 'Cartão de crédito' : 'Dinheiro'}\n`;
+        if (payment === 'dinheiro') msg += `💰 Troco para: R$ ${parseFloat(document.getElementById('changeAmount').value).toFixed(2)}\n`;
+        msg += `\n--- ITENS ---\n`;
+        let total = 0;
+        cart.forEach(item => {
+            const subtotal = item.price * item.quantity;
+            total += subtotal;
+            msg += `${item.quantity}x ${item.name} - R$ ${subtotal.toFixed(2)}\n`;
+        });
+        msg += `\n*Total: R$ ${total.toFixed(2)}*\n`;
+        msg += `\n📱 Pedido via cardápio digital.`;
+        window.open(`https://wa.me/5534998822605?text=${encodeURIComponent(msg)}`, '_blank');
+        cart = [];
+        document.querySelectorAll('.btn-undo').forEach(b => b.style.display = 'none');
+        document.querySelectorAll('.btn-add').forEach(b => b.style.display = 'inline-flex');
+        updateCartUI();
+        closeModal();
+    }
+
+    // ===== DESTAQUE BARRA DE NAVEGAÇÃO =====
+    const sections = document.querySelectorAll('.section');
+    const navLinks = document.querySelectorAll('.nav-link');
+    function updateActiveLink() {
+        let current = '';
+        const scrollPosition = window.scrollY + 120;
+        sections.forEach(section => {
+            const top = section.offsetTop;
+            const height = section.offsetHeight;
+            if (scrollPosition >= top && scrollPosition < top + height) {
+                current = section.getAttribute('id');
+            }
+        });
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === '#' + current) {
+                link.classList.add('active');
+            }
+        });
+    }
+    window.addEventListener('scroll', updateActiveLink);
+    window.addEventListener('load', updateActiveLink);
+
+    // ===== SPLASH SCREEN =====
+    window.addEventListener('load', function() {
+        setTimeout(() => {
+            document.getElementById('splash-screen').classList.add('hide');
+            setTimeout(() => {
+                document.getElementById('splash-screen').style.display = 'none';
+            }, 800);
+        }, 3000);
+    });
+
+    // ===== REMOVIDO O POP-UP AUTOMÁTICO DE RESERVA (15s) =====
+    // O modal de reserva agora só aparece quando o cliente tentar adicionar um item em dia não permitido.
+
+    // Inicializa contador
+    updateCartUI();
+
+    // Seleção visual dos acompanhamentos
+    document.querySelectorAll('.acompanhamento-item input[type="checkbox"]').forEach(cb => {
+        cb.addEventListener('change', function() {
+            const item = this.closest('.acompanhamento-item');
+            this.checked ? item.classList.add('selected') : item.classList.remove('selected');
+        });
+    });
+</script>
+
+</body>
+</html>
