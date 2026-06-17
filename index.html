@@ -10,8 +10,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     
     <style>
-        /* --- TODOS OS ESTILOS ANTERIORES PERMANECEM IGUAIS --- */
-        /* (repeti o código completo por questões de fidelidade, mas você pode manter seu CSS original) */
         :root {
             --bg-dark: #1c120e;
             --card-bg: #2b1e19;
@@ -76,10 +74,7 @@
             0% { transform: translateY(-100%); opacity: 0; }
             100% { transform: translateY(0); opacity: 1; }
         }
-        #splash-screen.hide {
-            opacity: 0;
-            pointer-events: none;
-        }
+        #splash-screen.hide { opacity: 0; pointer-events: none; }
 
         /* --- CABEÇALHO --- */
         .header {
@@ -322,6 +317,72 @@
         .map-card .map-button:active { transform: scale(0.95); background-color: #a0221d; }
         .map-card .map-button svg { width: 20px; height: 20px; fill: #fff; }
         .map-card .map-address { margin-top: 12px; color: var(--text-muted); font-size: 0.85rem; }
+
+        /* --- ESPAÇO PARA ANUNCIANTES (16:4) --- */
+        .anunciante-banner {
+            margin: 10px 20px 10px 20px; /* mesma margem das seções */
+            padding: 0;
+            background: linear-gradient(135deg, #2b1e19, #1c120e);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 12px;
+            overflow: hidden;
+            aspect-ratio: 16 / 4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s;
+        }
+        .anunciante-banner:hover {
+            background: linear-gradient(135deg, #3d2d26, #2b1e19);
+        }
+        .anunciante-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            padding: 0 16px;
+            text-align: center;
+            width: 100%;
+        }
+        .anunciante-tag {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            background: rgba(255,255,255,0.05);
+            padding: 2px 10px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+        .anunciante-text {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            font-weight: 400;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .anunciante-text .emoji {
+            font-size: 1rem;
+        }
+        .anunciante-cta {
+            background: transparent;
+            color: var(--accent-gold);
+            border: 1px solid var(--accent-gold);
+            padding: 4px 16px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: background 0.2s, color 0.2s;
+            white-space: nowrap;
+        }
+        .anunciante-cta:hover {
+            background: var(--accent-gold);
+            color: var(--bg-dark);
+        }
 
         .footer-credit {
             text-align: center;
@@ -589,6 +650,10 @@
             .btn-undo { font-size: 0.7rem; padding: 2px 6px; }
             .acompanhamentos-grid { grid-template-columns: 1fr 1fr; }
             .reserva-itens-grid { grid-template-columns: 1fr 1fr; }
+            .anunciante-banner { margin: 10px 10px; }
+            .anunciante-text { font-size: 0.7rem; }
+            .anunciante-cta { font-size: 0.6rem; padding: 2px 12px; }
+            .anunciante-tag { font-size: 0.6rem; }
         }
     </style>
 </head>
@@ -754,6 +819,17 @@
             </div>
         </div>
     </section>
+
+    <!-- ===== ESPAÇO PARA ANUNCIANTES (16:4) ===== -->
+    <div class="anunciante-banner">
+        <div class="anunciante-content">
+            <span class="anunciante-tag">📢 Espaço para anunciantes</span>
+            <span class="anunciante-text">
+                <span class="emoji">🚀</span> Destaque sua marca aqui!
+            </span>
+            <a href="https://wa.me/5534991058994?text=Olá,%20gostaria%20de%20anunciar!" class="anunciante-cta" target="_blank">Saiba mais</a>
+        </div>
+    </div>
 
     <!-- SEÇÃO: ACOMPANHAMENTOS -->
     <section class="section" id="acompanhamentos">
