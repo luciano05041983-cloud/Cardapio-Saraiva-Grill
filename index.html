@@ -100,32 +100,13 @@
         .logo-placeholder img { width: 100%; height: 100%; object-fit: cover; }
         .header h1 { font-family: 'Barlow Condensed', sans-serif; font-size: 2rem; letter-spacing: 1px; text-transform: uppercase; }
         .header p { font-size: 0.9rem; color: var(--text-muted); margin-top: 5px; }
-        .header .instagram-link {
-            display: inline-block;
-            margin-top: 10px;
-            color: var(--accent-gold);
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 0.9rem;
-            transition: color 0.2s;
-        }
-        .header .instagram-link:hover { color: var(--text-light); }
-        .header .instagram-link svg { width: 18px; height: 18px; vertical-align: middle; fill: var(--accent-gold); margin-right: 5px; transition: fill 0.2s; }
-        .header .instagram-link:hover svg { fill: var(--text-light); }
-        .header .address-link {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            margin-top: 12px;
-            color: var(--text-muted);
-            text-decoration: none;
+        .header .bible-verse {
             font-size: 0.85rem;
-            transition: color 0.2s;
+            color: var(--accent-gold);
+            margin-top: 6px;
+            font-style: italic;
+            letter-spacing: 0.5px;
         }
-        .header .address-link:hover { color: var(--accent-gold); }
-        .header .address-link svg { width: 16px; height: 16px; fill: var(--accent-gold); transition: fill 0.2s; }
-        .header .address-link:hover svg { fill: var(--text-light); }
 
         .marquee-container {
             overflow: hidden;
@@ -317,6 +298,41 @@
         .map-card .map-button:active { transform: scale(0.95); background-color: #a0221d; }
         .map-card .map-button svg { width: 20px; height: 20px; fill: #fff; }
         .map-card .map-address { margin-top: 12px; color: var(--text-muted); font-size: 0.85rem; }
+
+        /* Bloco de redes e endereço no final */
+        .footer-info {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            margin: 10px 20px 20px 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        .footer-info .info-title {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 1.2rem;
+            color: var(--text-light);
+            margin-bottom: 12px;
+        }
+        .footer-info .info-item {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin: 6px 10px;
+            transition: color 0.2s;
+        }
+        .footer-info .info-item:hover { color: var(--accent-gold); }
+        .footer-info .info-item svg {
+            width: 20px;
+            height: 20px;
+            fill: var(--accent-gold);
+            transition: fill 0.2s;
+        }
+        .footer-info .info-item:hover svg { fill: var(--text-light); }
 
         /* --- ESPAÇO PARA ANUNCIANTES (16:4) --- */
         .anunciante-banner {
@@ -673,19 +689,8 @@
         </div>
         <h1>Saraiva Grill</h1>
         <p>🔥 O melhor da cidade na sua mesa!</p>
-        <a href="https://instagram.com/saraivagrill" target="_blank" class="instagram-link">
-            <svg viewBox="0 0 24 24">
-                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-            </svg>
-            @saraivagrill
-        </a>
-
-        <a href="https://maps.app.goo.gl/QqUqbAyWKUNXjmL76?g_st=ac" target="_blank" class="address-link">
-            <svg viewBox="0 0 24 24">
-                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-            </svg>
-            Rua Quintino Bocaiúva, 1900 - Saraiva
-        </a>
+        <!-- Passagem bíblica -->
+        <div class="bible-verse">📖 1 João 5:14</div>
 
         <div class="marquee-container">
             <div class="marquee-text">📅 Funcionamos aos sábados, domingos e feriados!</div>
@@ -887,6 +892,23 @@
             <div class="map-address">Rua Quintino Bocaiúva, 1900 - Saraiva</div>
         </div>
     </section>
+
+    <!-- ===== INFORMAÇÕES ADICIONAIS (Instagram + Endereço) ===== -->
+    <div class="footer-info">
+        <div class="info-title">📱 Conecte-se conosco</div>
+        <a href="https://instagram.com/saraivagrill" target="_blank" class="info-item">
+            <svg viewBox="0 0 24 24">
+                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+            </svg>
+            @saraivagrill
+        </a>
+        <a href="https://maps.app.goo.gl/QqUqbAyWKUNXjmL76?g_st=ac" target="_blank" class="info-item">
+            <svg viewBox="0 0 24 24">
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+            </svg>
+            Rua Quintino Bocaiúva, 1900 - Saraiva
+        </a>
+    </div>
 
     <!-- RODAPÉ -->
     <div class="footer-credit">
@@ -1419,9 +1441,6 @@
             }, 800);
         }, 3000);
     });
-
-    // ===== REMOVIDO O POP-UP AUTOMÁTICO DE RESERVA (15s) =====
-    // O modal de reserva agora só aparece quando o cliente tentar adicionar um item em dia não permitido.
 
     // Inicializa contador
     updateCartUI();
