@@ -450,11 +450,11 @@
         .nav-bar a:hover { color: var(--text-light); }
         .nav-bar a.active { color: var(--accent-gold); border-bottom-color: var(--accent-gold); }
 
-        .whatsapp-float {
+        /* Botões flutuantes */
+        .whatsapp-float,
+        .share-float {
             position: fixed;
-            bottom: 80px;
             right: 20px;
-            background-color: #25d366;
             border-radius: 50%;
             width: 56px;
             height: 56px;
@@ -465,9 +465,23 @@
             z-index: 150;
             transition: transform 0.2s, background-color 0.2s;
             text-decoration: none;
+            border: none;
+            cursor: pointer;
+        }
+        .whatsapp-float {
+            bottom: 80px;
+            background-color: #25d366;
         }
         .whatsapp-float:active { transform: scale(0.9); background-color: #1ebd59; }
         .whatsapp-float svg { width: 32px; height: 32px; fill: #fff; }
+
+        .share-float {
+            bottom: 150px;
+            background-color: var(--primary-red);
+            color: #fff;
+        }
+        .share-float:active { transform: scale(0.9); background-color: #a0221d; }
+        .share-float svg { width: 28px; height: 28px; fill: #fff; }
 
         /* MODAIS */
         .modal-overlay {
@@ -654,10 +668,61 @@
         }
         .btn-confirm-acompanhamentos:active { transform: scale(0.97); background-color: #a0221d; }
 
+        /* Modal de Compartilhamento */
+        .share-modal .modal-title { color: var(--accent-gold); }
+        .share-modal .share-message {
+            text-align: center;
+            font-size: 1rem;
+            line-height: 1.6;
+            color: var(--text-light);
+            margin: 20px 0;
+            padding: 0 10px;
+        }
+        .share-modal .share-message strong { color: var(--accent-gold); }
+        .share-modal .share-message .emoji-big { font-size: 2rem; display: block; margin-bottom: 10px; }
+        .share-modal .share-message .highlight { background: rgba(212, 163, 115, 0.2); padding: 4px 8px; border-radius: 6px; }
+        .share-modal .btn-share-copy {
+            display: block;
+            width: 100%;
+            background-color: var(--primary-red);
+            color: #fff;
+            border: none;
+            padding: 12px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.2s;
+            margin-top: 5px;
+        }
+        .share-modal .btn-share-copy:active { transform: scale(0.97); background-color: #a0221d; }
+        .share-modal .btn-share-close {
+            display: block;
+            width: 100%;
+            background: transparent;
+            border: 2px solid var(--text-muted);
+            color: var(--text-muted);
+            padding: 10px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background-color 0.2s, color 0.2s;
+            margin-top: 10px;
+        }
+        .share-modal .btn-share-close:hover { background-color: var(--text-muted); color: var(--bg-dark); }
+
         @media (max-width: 400px) {
             .nav-bar a { font-size: 0.6rem; padding: 2px 4px; }
-            .whatsapp-float { width: 48px; height: 48px; bottom: 70px; right: 10px; }
+            .whatsapp-float,
+            .share-float {
+                width: 48px;
+                height: 48px;
+            }
+            .whatsapp-float { bottom: 70px; right: 10px; }
             .whatsapp-float svg { width: 28px; height: 28px; }
+            .share-float { bottom: 130px; right: 10px; }
+            .share-float svg { width: 24px; height: 24px; }
             .marquee-text { font-size: 0.75rem; }
             .cart-counter { font-size: 0.75rem; padding: 6px 14px; }
             .cart-counter .badge { width: 20px; height: 20px; font-size: 0.7rem; }
@@ -929,6 +994,13 @@
         <a href="#acompanhamentos" class="nav-link">Acomp.</a>
     </nav>
 
+    <!-- BOTÃO COMPARTILHAR (acima do WhatsApp) -->
+    <button class="share-float" onclick="compartilhar()" aria-label="Compartilhar cardápio">
+        <svg viewBox="0 0 24 24">
+            <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/>
+        </svg>
+    </button>
+
     <!-- WHATSAPP FLUTUANTE -->
     <a href="https://wa.me/5534998822605?text=Olá,%20gostaria%20de%20fazer%20um%20pedido!" class="whatsapp-float" target="_blank" aria-label="WhatsApp">
         <svg viewBox="0 0 24 24">
@@ -1082,11 +1154,31 @@
     </div>
 </div>
 
+<!-- MODAL COMPARTILHAR -->
+<div class="modal-overlay share-modal" id="shareModal">
+    <div class="modal">
+        <button class="modal-close" onclick="fecharShare()">×</button>
+        <div class="modal-title">📤 Compartilhe com a família e amigos!</div>
+        <div class="share-message">
+            <span class="emoji-big">🍗🔥</span>
+            <p>
+                <strong>Ei, você!</strong> Sabia que compartilhar é um ato de amor?<br><br>
+                Ao enviar este cardápio para seus <strong>familiares e amigos</strong>, você não só ajuda o <strong>Saraiva Grill</strong> a crescer, como também garante que todos tenham acesso a <strong>frangos assados suculentos e combos incríveis</strong>.<br><br>
+                <span class="highlight">👉 Quanto mais gente conhecer, mais saboroso fica o nosso encontro!</span><br><br>
+                <strong>Compartilhe agora e espalhe essa experiência!</strong> 🚀
+            </p>
+        </div>
+        <button class="btn-share-copy" onclick="copiarLink()">📋 Copiar link do cardápio</button>
+        <button class="btn-share-close" onclick="fecharShare()">Fechar</button>
+    </div>
+</div>
+
 <script>
     // ===== ESTADO DO PEDIDO =====
     let cart = [];
     let toastTimeout = null;
     let combo2Pending = null;
+    const SHARE_URL = 'https://luciano05041983-cloud.github.io/Cardapio-Saraiva-Grill/';
 
     // ===== TOAST =====
     function showToast(message) {
@@ -1110,7 +1202,7 @@
         return feriados.includes(`${mes}-${dia}`);
     }
 
-    // ===== RESERVA (agora com itens) =====
+    // ===== RESERVA =====
     function showReservaModal() {
         document.getElementById('reservaModal').classList.add('active');
     }
@@ -1125,7 +1217,6 @@
         const horario = document.getElementById('reservaHorario').value;
         const obs = document.getElementById('reservaObs').value.trim();
 
-        // Captura os itens marcados
         const checkboxes = document.querySelectorAll('#reservaForm input[type="checkbox"]:checked');
         const itensSelecionados = Array.from(checkboxes).map(cb => cb.value);
 
@@ -1408,6 +1499,56 @@
         updateCartUI();
         closeModal();
     }
+
+    // ===== COMPARTILHAR =====
+    function compartilhar() {
+        // Copia o link
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(SHARE_URL).then(() => {
+                showToast('✅ Link copiado!');
+            }).catch(() => {
+                fallbackCopy();
+            });
+        } else {
+            fallbackCopy();
+        }
+        // Abre o modal de compartilhamento
+        document.getElementById('shareModal').classList.add('active');
+    }
+
+    function fallbackCopy() {
+        // Fallback para navegadores antigos
+        const textArea = document.createElement('textarea');
+        textArea.value = SHARE_URL;
+        document.body.appendChild(textArea);
+        textArea.select();
+        try {
+            document.execCommand('copy');
+            showToast('✅ Link copiado!');
+        } catch (err) {
+            showToast('❌ Não foi possível copiar. Copie manualmente.');
+        }
+        document.body.removeChild(textArea);
+    }
+
+    function copiarLink() {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(SHARE_URL).then(() => {
+                showToast('✅ Link copiado novamente!');
+            }).catch(() => {
+                fallbackCopy();
+            });
+        } else {
+            fallbackCopy();
+        }
+    }
+
+    function fecharShare() {
+        document.getElementById('shareModal').classList.remove('active');
+    }
+    document.getElementById('shareModal').addEventListener('click', function(e) {
+        if (e.target === this) fecharShare();
+    });
 
     // ===== DESTAQUE BARRA DE NAVEGAÇÃO =====
     const sections = document.querySelectorAll('.section');
