@@ -336,7 +336,7 @@
 
         /* --- ESPAÇO PARA ANUNCIANTES (16:4) --- */
         .anunciante-banner {
-            margin: 10px 20px 10px 20px; /* mesma margem das seções */
+            margin: 10px 20px 10px 20px;
             padding: 0;
             background: linear-gradient(135deg, #2b1e19, #1c120e);
             border: 1px solid rgba(255,255,255,0.08);
@@ -681,7 +681,24 @@
         .share-modal .share-message strong { color: var(--accent-gold); }
         .share-modal .share-message .emoji-big { font-size: 2rem; display: block; margin-bottom: 10px; }
         .share-modal .share-message .highlight { background: rgba(212, 163, 115, 0.2); padding: 4px 8px; border-radius: 6px; }
-        .share-modal .btn-share-copy {
+
+        .btn-share-whatsapp {
+            display: block;
+            width: 100%;
+            background-color: #25d366;
+            color: #fff;
+            border: none;
+            padding: 12px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.2s;
+            margin-top: 10px;
+        }
+        .btn-share-whatsapp:active { transform: scale(0.97); background-color: #1ebd59; }
+
+        .btn-share-copy {
             display: block;
             width: 100%;
             background-color: var(--primary-red);
@@ -693,10 +710,11 @@
             font-size: 1rem;
             cursor: pointer;
             transition: background-color 0.2s, transform 0.2s;
-            margin-top: 5px;
+            margin-top: 10px;
         }
-        .share-modal .btn-share-copy:active { transform: scale(0.97); background-color: #a0221d; }
-        .share-modal .btn-share-close {
+        .btn-share-copy:active { transform: scale(0.97); background-color: #a0221d; }
+
+        .btn-share-close {
             display: block;
             width: 100%;
             background: transparent;
@@ -710,7 +728,7 @@
             transition: background-color 0.2s, color 0.2s;
             margin-top: 10px;
         }
-        .share-modal .btn-share-close:hover { background-color: var(--text-muted); color: var(--bg-dark); }
+        .btn-share-close:hover { background-color: var(--text-muted); color: var(--bg-dark); }
 
         @media (max-width: 400px) {
             .nav-bar a { font-size: 0.6rem; padding: 2px 4px; }
@@ -890,7 +908,7 @@
         </div>
     </section>
 
-    <!-- ===== ESPAÇO PARA ANUNCIANTES (16:4) ===== -->
+    <!-- ===== PRIMEIRO ESPAÇO PARA ANUNCIANTES (16:4) ===== -->
     <div class="anunciante-banner">
         <div class="anunciante-content">
             <span class="anunciante-tag">📢 Espaço para anunciantes</span>
@@ -957,6 +975,17 @@
             <div class="map-address">Rua Quintino Bocaiúva, 1900 - Saraiva</div>
         </div>
     </section>
+
+    <!-- ===== SEGUNDO ESPAÇO PARA ANUNCIANTES (16:4) ===== -->
+    <div class="anunciante-banner">
+        <div class="anunciante-content">
+            <span class="anunciante-tag">📢 Espaço para anunciantes</span>
+            <span class="anunciante-text">
+                <span class="emoji">🌟</span> Seu negócio aqui!
+            </span>
+            <a href="https://wa.me/5534991058994?text=Olá,%20gostaria%20de%20anunciar!" class="anunciante-cta" target="_blank">Saiba mais</a>
+        </div>
+    </div>
 
     <!-- ===== INFORMAÇÕES ADICIONAIS (Instagram + Endereço) ===== -->
     <div class="footer-info">
@@ -1168,6 +1197,9 @@
                 <strong>Compartilhe agora e espalhe essa experiência!</strong> 🚀
             </p>
         </div>
+        <button class="btn-share-whatsapp" onclick="compartilharWhatsApp()">
+            📤 Compartilhar no WhatsApp
+        </button>
         <button class="btn-share-copy" onclick="copiarLink()">📋 Copiar link do cardápio</button>
         <button class="btn-share-close" onclick="fecharShare()">Fechar</button>
     </div>
@@ -1502,7 +1534,6 @@
 
     // ===== COMPARTILHAR =====
     function compartilhar() {
-        // Copia o link
         if (navigator.clipboard && navigator.clipboard.writeText) {
             navigator.clipboard.writeText(SHARE_URL).then(() => {
                 showToast('✅ Link copiado!');
@@ -1512,12 +1543,10 @@
         } else {
             fallbackCopy();
         }
-        // Abre o modal de compartilhamento
         document.getElementById('shareModal').classList.add('active');
     }
 
     function fallbackCopy() {
-        // Fallback para navegadores antigos
         const textArea = document.createElement('textarea');
         textArea.value = SHARE_URL;
         document.body.appendChild(textArea);
@@ -1541,6 +1570,12 @@
         } else {
             fallbackCopy();
         }
+    }
+
+    function compartilharWhatsApp() {
+        const mensagem = `Olá! Confira o cardápio do Saraiva Grill: ${SHARE_URL}`;
+        const url = `https://wa.me/?text=${encodeURIComponent(mensagem)}`;
+        window.open(url, '_blank');
     }
 
     function fecharShare() {
